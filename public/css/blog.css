@@ -1,7 +1,7 @@
 .bg-image {
     background-image: url("../images/blog-main-background.jpg");
     height: 40vh;
-    min-height: 195px;
+    min-height: 275px;
     background-repeat: no-repeat;
     background-position: center;
 }
@@ -9,11 +9,15 @@
 .bg-opacity {
     background-color: rgba(0,0,0, 0.4);
     height: inherit;
-    min-height: 195px;
+    min-height: 275px;
 }
 
 .form {
     width: 100%;
+}
+
+.input-label {
+    color: white;
 }
 
 .title {

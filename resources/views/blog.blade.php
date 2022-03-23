@@ -11,7 +11,6 @@
             <link rel="stylesheet" href="{{ asset('css/blog.css') }}">
         @show
 
-        <script ></script>
     </head>
     <body>
     <div class="bg-image">
@@ -28,7 +27,15 @@
                 <div class="container">
                     <div class="row d-flex justify-content-center">
                         <div class="col-md-6">
-                            <input type="text" class="blog-input" name="post_content">
+                            <label for="post_title" class="input-label">Title</label>
+                            <input type="text" class="blog-input" name="post_title" id="post_title" value="{{ old('post_title') ?? '' }}">
+                            <small class="text-danger"> @error('post_title'){{$message}}@enderror</small>
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-6">
+                            <label for="post_content" class="input-label">Content</label>
+                            <input type="text" class="blog-input" name="post_content" id="post_content" value="{{ old('post_content') ?? '' }}">
                             <small class="text-danger">@error('post_content'){{$message}}@enderror</small>
                         </div>
                     </div>
@@ -50,5 +57,3 @@
     @show
     </body>
 </html>
-
-{{--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--}}

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use mysql_xdevapi\Exception;
 
 class PostController extends Controller
 {
@@ -15,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('id', 'desc')->get();
+        $posts = Post::orderBy('created_at', 'desc')->paginate(3);
         return view('posts')->with('posts', $posts);
     }
 
@@ -37,23 +38,23 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $validated = $request->validated();
-
-        $post = Post::create([
-           'content' => $request->post_content,
-        ]);
-        return redirect()->route('/');
+            Post::create([
+                'title'  => $request->post_title,
+                'content' => $request->post_content,
+            ]);
+            return redirect()->route('/');
     }
 
     /**
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $postItem = Post::find($id);
+        return view('post_item')->with('postItem', $postItem);
     }
 
     /**
@@ -72,11 +73,13 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
-        //
+            Post::where('id', $id)
+                ->update(['title' => $request->post_title, 'content' => $request->post_content]);
+            return redirect('/');
     }
 
     /**

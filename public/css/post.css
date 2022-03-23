@@ -3,6 +3,53 @@
     border-radius: 20px;
 }
 
+.post-item a {
+    text-decoration: none;
+    color: black;
+}
+
+.post-title {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.form-edit button {
+    width: 100%;
+}
+
 .form-delete button {
     width: 100%;
+}
+
+.post-item-main {
+    background-image: url("../images/post-bg.jpg");
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.post-item-opacity {
+    background-color: rgba(0,0,0, 0.6);
+    height: inherit;
+}
+
+.post-item-opacity form {
+    width: 100%;
+}
+
+.post-item-label {
+    color: white;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.post-item-input {
+    width: 100%;
+    border: 2px solid #0d6efd;
+    border-radius: 5px;
+}
+
+.post-item-content {
+    height: fit-content;
 }

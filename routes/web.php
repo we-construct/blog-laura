@@ -21,8 +21,4 @@ use App\Http\Controllers\PostController;
 
 Route::get('/', [PostController::class, 'index'])->name('/');
 
-Route::resource('posts', PostController::class)->names([
-   'create'    => 'posts.store',
-   'update'    => 'posts.update',
-   'delete'    => 'posts.destroy',
-]);
+Route::resource('posts', PostController::class);
