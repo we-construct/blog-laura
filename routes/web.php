@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BlogController;
 use App\Http\Controllers\PostController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,10 +14,18 @@ use App\Http\Controllers\PostController;
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::get('/', [PostController::class, 'index'])->name('/');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
+    Route::resource('posts', PostController::class);
+    Route::get('/my-posts/{userId}', [PostController::class, 'myPosts']);
+});
+//
+//Route::get('/dashboard', function () {
+//    return view('dashboard');
+//})->middleware(['auth'])->name('dashboard');
 
-Route::resource('posts', PostController::class);
+require __DIR__.'/auth.php';

@@ -7,7 +7,7 @@
     <title>Post</title>
 
     @section('styles')
-        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/main/app.css') }}">
         <link rel="stylesheet" href="{{ asset('css/post.css') }}">
     @show
 
@@ -37,11 +37,14 @@
                         <small class="text-danger">@error('post_content'){{$message}}@enderror</small>
                     </div>
                 </div>
-                <div class="row mt-2">
-                    <div class="col-md-4 offset-md-4">
-                        <button type="submit" class="btn btn-primary submit-post">Update</button>
+                @if($postItem->user_id === $user_id)
+                    <div class="row mt-2">
+                        <div class="col-md-4 offset-md-4">
+                            <button type="submit" class="btn btn-primary submit-post">Update</button>
+                        </div>
                     </div>
-                </div>
+                @endif
+
             </div>
         </form>
 

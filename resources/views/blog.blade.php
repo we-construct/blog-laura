@@ -7,7 +7,7 @@
         <title>Blog</title>
 
         @section('styles')
-            <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/main/app.css') }}">
             <link rel="stylesheet" href="{{ asset('css/blog.css') }}">
         @show
 
@@ -16,6 +16,14 @@
     <div class="bg-image">
         <div class="bg-opacity d-flex flex-column justify-content-end">
             <div class="container">
+                <div class="row d-flex justify-content-end">
+                    <form method="POST" action="{{ route('logout') }}" class="logout-form">
+                        @csrf
+                        <a href="route('logout')" class="align-self-end">
+                            <button class="btn btn-light">Log Out</button>
+                        </a>
+                    </form>
+                </div>
                 <div class="row d-flex justify-content-center">
                     <div class="col-md-6">
                         <h1 class="title">Post Your Thoughts In This Blog</h1>

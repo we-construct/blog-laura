@@ -12,6 +12,10 @@
     min-height: 275px;
 }
 
+.logout-form {
+    width: fit-content;
+}
+
 .form {
     width: 100%;
 }

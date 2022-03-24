@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use mysql_xdevapi\Exception;
 
 class PostController extends Controller
@@ -17,7 +18,8 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::orderBy('created_at', 'desc')->paginate(3);
-        return view('posts')->with('posts', $posts);
+        return view('dashboard')->with('posts', $posts)
+                                     ->with('userId', Auth::id());
     }
 
     /**
@@ -27,7 +29,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('blog');
     }
 
     /**
@@ -38,11 +40,13 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-            Post::create([
-                'title'  => $request->post_title,
-                'content' => $request->post_content,
-            ]);
-            return redirect()->route('/');
+        $post = Post::create([
+            'title' => $request->post_title,
+            'content' => $request->post_content,
+        ]);
+        $post->user()->associate(Auth::id());
+        $post->save();
+        return redirect()->route('/blog');
     }
 
     /**
@@ -54,18 +58,20 @@ class PostController extends Controller
     public function show($id)
     {
         $postItem = Post::find($id);
-        return view('post_item')->with('postItem', $postItem);
+        return view('post_details')->with('postItem', $postItem);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
+        $postItem = Post::find($id);
+        return view('post_item')->with('postItem', $postItem)
+            ->with('user_id', Auth::id());
     }
 
     /**
@@ -79,7 +85,7 @@ class PostController extends Controller
     {
             Post::where('id', $id)
                 ->update(['title' => $request->post_title, 'content' => $request->post_content]);
-            return redirect('/');
+            return redirect('/blog');
     }
 
     /**
@@ -92,6 +98,11 @@ class PostController extends Controller
     {
         $deletePost = Post::find($id);
         $deletePost->delete();
-        return redirect('/');
+        return redirect('/blog');
+    }
+
+    public function myPosts($userId) {
+        $posts = Post::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(3);
+        return view('my_posts')->with('posts', $posts);
     }
 }
