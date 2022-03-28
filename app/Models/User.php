@@ -23,6 +23,8 @@ class User extends Authenticatable
         'password',
     ];
 
+    protected $appends = ['following_ids'];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -44,5 +46,18 @@ class User extends Authenticatable
 
     public function posts() {
         return $this->hasMany(Post::class);
+    }
+
+    public function followers() { /*The user is a follower*/
+        return $this->hasMany(Follower::class);
+    }
+
+    public function following() { /*The user is following someone*/
+        return $this->hasMany(Follower::class, 'following', 'id');
+    }
+
+    public function getFollowingIdsAttribute()
+    {
+        return $this->following->pluck('user_id');
     }
 }

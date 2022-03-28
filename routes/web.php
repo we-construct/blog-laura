@@ -21,6 +21,8 @@ Route::get('/', function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::resource('profile', ProfileController::class);
+    Route::get('/all-users', [ProfileController::class, 'allUsers'])->name('all-users');
+    Route::post('/follow-unfollow/{userId}', [ProfileController::class, 'followOrUnfollow'])->name('follow-unfollow');
     Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
     Route::resource('posts', PostController::class);
     Route::get('/my-posts/{userId}', [PostController::class, 'myPosts']);

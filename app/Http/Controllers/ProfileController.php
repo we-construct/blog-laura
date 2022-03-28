@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileRequest;
+use App\Models\Follower;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
@@ -17,7 +19,15 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        return view('profile', ['user' => Auth::user()]);
+        $users = User::with('followers', 'following')
+            ->where('id', '<>', Auth::id())
+            ->paginate(2);
+        return view('profile', [
+            'auth_user' => Auth::user(),
+            'following_ids' => Auth::user()->following_ids,
+            'auth_user_id' => Auth::id(),
+            'users' => $users,
+            ]);
     }
 
     /**
@@ -71,14 +81,14 @@ class ProfileController extends Controller
         $user = User::find($id);
         if ($request->hasFile('avatar')) {
             $avatar = $request->file('avatar');
-            $avatarName = $avatar->getClientOriginalName();
-            $avatar->move(public_path('images'), $avatarName);
+            $avatar_name = $avatar->getClientOriginalName();
+            $avatar->move(public_path('images'), $avatar_name);
             User::where('id', $id)
-                ->update(['name' => $request->name, 'email' => $request->email, 'password' => $request->password, 'avatar_path' => $avatarName]);
+                ->update(['name' => $request->name, 'email' => $request->email, 'password' => Hash::make($request->password), 'avatar_path' => $avatarName]);
             return redirect('/profile');
         }
         User::where('id', $id)
-            ->update(['name' => $request->name, 'email' => $request->email, 'password' => $request->password]);
+            ->update(['name' => $request->name, 'email' => $request->email, 'password' => Hash::make($request->password)]);
         return redirect('/profile');
     }
 
@@ -92,4 +102,29 @@ class ProfileController extends Controller
     {
         //
     }
+
+    public function allUsers() {
+        $users = User::with('followers', 'following')->where('id', '<>', Auth::id())->paginate(3);
+        return view('users_list', [
+            'users' => $users,
+            'following_ids' => Auth::user()->following_ids,
+            'auth_user_id' => Auth::id(),
+        ]);
+    }
+
+    public function followOrUnfollow($id) {
+
+        $follower_and_followed_user = Follower::where('user_id', Auth::id())
+                                            ->where('following', $id)
+                                            ->first();
+        if ($follower_and_followed_user === null) {
+            $auth_user = User::find(Auth::id());
+            $auth_user->followers()->create(["following" => $id]);
+        } else {
+            $follower_and_followed_user->delete();
+        }
+        return redirect()->back();
+
+    }
+
 }
