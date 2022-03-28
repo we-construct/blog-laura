@@ -18,8 +18,7 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::orderBy('created_at', 'desc')->paginate(3);
-        return view('dashboard')->with('posts', $posts)
-                                     ->with('userId', Auth::id());
+        return view('dashboard', ['posts' => $posts, 'userId' => Auth::id(), ]);
     }
 
     /**
@@ -46,7 +45,7 @@ class PostController extends Controller
         ]);
         $post->user()->associate(Auth::id());
         $post->save();
-        return redirect()->route('/blog');
+        return redirect()->route('dashboard');
     }
 
     /**
@@ -85,7 +84,7 @@ class PostController extends Controller
     {
             Post::where('id', $id)
                 ->update(['title' => $request->post_title, 'content' => $request->post_content]);
-            return redirect('/blog');
+            return redirect('/dashboard');
     }
 
     /**
@@ -98,7 +97,7 @@ class PostController extends Controller
     {
         $deletePost = Post::find($id);
         $deletePost->delete();
-        return redirect('/blog');
+        return redirect('/dashboard');
     }
 
     public function myPosts($userId) {
