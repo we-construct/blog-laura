@@ -45,11 +45,14 @@ class ProfileController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
+        $user = User::find($id);
+//        $posts = $user->posts->paginate(3);
+        $posts = Post::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(3);
+        return view('user_profile_details', ['user' => $user, 'posts' => $posts]);
     }
 
     /**
