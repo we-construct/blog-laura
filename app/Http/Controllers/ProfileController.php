@@ -72,9 +72,8 @@ class ProfileController extends Controller
 
     public function followOrUnfollow($id) {
 
-        $follower_and_followed_user = Follower::where('user_id', Auth::id())
-            ->where('following', $id)
-            ->first();
+        $follower_and_followed_user = Auth::user()->followers()->where('following', '=' , $id)->first();
+
         if ($follower_and_followed_user === null) {
             $auth_user = User::find(Auth::id());
             $auth_user->followers()->create(["following" => $id]);
@@ -82,7 +81,6 @@ class ProfileController extends Controller
             $follower_and_followed_user->delete();
         }
         return redirect()->back();
-
     }
 }
 

@@ -24,7 +24,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('profile/{userId}/details', [ProfileController::class, 'show']);
     Route::get('profile/{userId}/edit', [ProfileController::class, 'edit']);
     Route::put('profile/{userId}/update', [ProfileController::class, 'update']);
-
     Route::get('/all-users', [ProfileController::class, 'allUsers'])->name('all-users');
     Route::put('/update-avatar/{userId}', [ProfileController::class, 'updateAvatar'])->name('update-avatar');
     Route::post('/follow-unfollow/{userId}', [ProfileController::class, 'followOrUnfollow'])->name('follow-unfollow');
