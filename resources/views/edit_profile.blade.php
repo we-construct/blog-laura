@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="container">
                         @if($user->avatar_path !== '')
-                            <img src="{{ asset('images/'.$user->avatar_path) }}" class="img-fluid rounded-start" alt="..." width="150" height="150">
+                            <img src="{{ asset('images/avatar/'.$user->avatar_path) }}" class="img-fluid rounded-start" alt="..." width="150" height="150">
                         @else
                             <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor"
                                  class="bi bi-file-person mt-2" viewBox="0 0 16 16">
@@ -20,15 +20,9 @@
                                 <path d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                             </svg>
                         @endif
-                        <form method="POST" action="{{ url('profile/' . $user->id)}}" enctype="multipart/form-data">
+                        <form method="POST" action="{{ url('profile/' . $user->id . '/update') }}" enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
-                            <div class="row">
-                                <div class="col-md-4 mt-2">
-                                    <input type="file" name="avatar" class="form-control">
-                                    <small class="text-danger">@error('avatar'){{$message}}@enderror</small>
-                                </div>
-                            </div>
                             <div class="row">
                                 <div class="col-md-2 mt-2">
                                     <label for="name">Name</label>

@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="container">
                         @if($user->avatar_path !== '')
-                            <img src="{{ asset('images/'.$user->avatar_path) }}" class="img-fluid rounded-start" alt="..." width="300" height="300">
+                            <img src="{{ asset('images/avatar/'.$user->avatar_path) }}" class="img-fluid rounded-start" alt="..." width="300" height="300">
                         @else
                             <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor"
                                  class="bi bi-file-person mt-2" viewBox="0 0 16 16">

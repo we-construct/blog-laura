@@ -12,7 +12,7 @@
                     <div class="card mb-3">
                         <div class="row g-0">
                             <div class="col-md-2 my-md-2">
-                                <a href="profile/{{ $user->id }}">
+                                <a href="profile/{{ $user->id }}/details">
                                     @if($user->avatar_path !== '')
                                         <img src="{{ 'images/'.$user->avatar_path }}" class="img-fluid rounded-start" alt="...">
                                     @else
@@ -26,7 +26,7 @@
                             <div class="col-md-7">
                                 <div class="card-body">
                                     <h5 class="card-title post-item text-center">
-                                        <a href="profile/{{ $user->id }}">
+                                        <a href="profile/{{ $user->id }}/details">
                                             <div class="post-title">
                                                     <p class="card-text ps-2"><small class="text-muted">{{ $user->name }}</small></p>
                                             </div>

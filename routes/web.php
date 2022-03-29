@@ -20,16 +20,17 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('profile', ProfileController::class);
+    Route::get('profile', [ProfileController::class, 'index'])->name('profile');
+    Route::get('profile/{userId}/details', [ProfileController::class, 'show']);
+    Route::get('profile/{userId}/edit', [ProfileController::class, 'edit']);
+    Route::put('profile/{userId}/update', [ProfileController::class, 'update']);
+
     Route::get('/all-users', [ProfileController::class, 'allUsers'])->name('all-users');
+    Route::put('/update-avatar/{userId}', [ProfileController::class, 'updateAvatar'])->name('update-avatar');
     Route::post('/follow-unfollow/{userId}', [ProfileController::class, 'followOrUnfollow'])->name('follow-unfollow');
     Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
     Route::resource('posts', PostController::class);
     Route::get('/my-posts/{userId}', [PostController::class, 'myPosts']);
 });
-//
-//Route::get('/dashboard', function () {
-//    return view('dashboard');
-//})->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';

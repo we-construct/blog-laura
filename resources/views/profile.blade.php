@@ -11,7 +11,7 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="container">
                         @if($auth_user->avatar_path !== '')
-                            <img src="{{ asset('images/'.$auth_user->avatar_path) }}" class="img-fluid rounded-start" alt="..." width="150" height="150">
+                            <img src="{{ asset('images/avatar/'.$auth_user->avatar_path) }}" class="img-fluid rounded-start" alt="..." width="150" height="150">
                         @else
                             <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor"
                                  class="bi bi-file-person mt-2" viewBox="0 0 16 16">
@@ -20,8 +20,21 @@
                                 <path d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
                             </svg>
                         @endif
+                        <form method="POST" action="{{ url('update-avatar/' . $auth_user->id)}}" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <div class="row">
+                                <div class="col-md-4 mt-2">
+                                    <input type="file" name="avatar" class="form-control">
+                                    <small class="text-danger">@error('avatar'){{$message}}@enderror</small>
+                                </div>
+                                <div class="col-md-2 mt-2">
+                                    <button type="submit" class="btn btn-primary mb-3">Update avatar</button>
+                                </div>
+                            </div>
+                        </form>
 
-                        <p>{{ $auth_user->name }}</p>
+                        <p class="mt-2">{{ $auth_user->name }}</p>
                         <p>{{ $auth_user->email }}</p>
 
                         <a href="profile/{{$auth_user->id}}/edit" class="form-edit">
@@ -41,9 +54,9 @@
                                     <div class="card mb-3">
                                         <div class="row g-0">
                                             <div class="col-md-2 my-md-2">
-                                                <a href="profile/{{ $user->id }}">
+                                                <a href="profile/{{ $user->id }}/details">
                                                     @if($user->avatar_path !== '')
-                                                        <img src="{{ 'images/'.$user->avatar_path }}" class="img-fluid rounded-start" alt="...">
+                                                        <img src="{{ 'images/avatar/'.$user->avatar_path }}" class="img-fluid rounded-start" alt="...">
                                                     @else
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor" class="bi bi-file-person mt-2" viewBox="0 0 16 16">
                                                             <path d="M12 1a1 1 0 0 1 1 1v10.755S12 11 8 11s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"/>
@@ -55,7 +68,7 @@
                                             <div class="col-md-7">
                                                 <div class="card-body">
                                                     <h5 class="card-title post-item text-center">
-                                                        <a href="profile/{{ $user->id }}">
+                                                        <a href="profile/{{ $user->id }}/details">
                                                             <div class="post-title">
                                                                 <p class="card-text ps-2"><small class="text-muted">{{ $user->name }}</small></p>
                                                             </div>
@@ -67,11 +80,11 @@
                                                 <div class="card-body">
                                                     <form action="{{ url('/follow-unfollow/'.$user->id) }}" method="POST">
                                                         @csrf
-                                                        @if (in_array($user->id, $following_ids->toArray()) && !in_array($auth_user_id, $user->following_ids->toArray()))
+                                                        @if (in_array($user->id, $following_ids->toArray()) && !in_array($auth_user->id, $user->following_ids->toArray()))
                                                             <button type="submit" class="btn btn-primary">
                                                                 Follow Back
                                                             </button>
-                                                        @elseif(in_array($auth_user_id, $user->following_ids->toArray()))
+                                                        @elseif(in_array($auth_user->id, $user->following_ids->toArray()))
                                                             <button type="submit" class="btn btn-secondary">
                                                                 Unfollow
                                                             </button>
@@ -102,14 +115,14 @@
                     <div class="container">
                         <h4>Following</h4>
                         @foreach($users as $user)
-                            @if(in_array($auth_user_id, $user->following_ids->toArray()))
+                            @if(in_array($auth_user->id, $user->following_ids->toArray()))
                                 <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-3">
                                     <div class="card mb-3">
                                         <div class="row g-0">
                                             <div class="col-md-2 my-md-2">
-                                                <a href="profile/{{ $user->id }}">
+                                                <a href="profile/{{ $user->id }}/details">
                                                     @if($user->avatar_path !== '')
-                                                        <img src="{{ 'images/'.$user->avatar_path }}" class="img-fluid rounded-start" alt="...">
+                                                        <img src="{{ 'images/avatar/'.$user->avatar_path }}" class="img-fluid rounded-start" alt="...">
                                                     @else
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor" class="bi bi-file-person mt-2" viewBox="0 0 16 16">
                                                             <path d="M12 1a1 1 0 0 1 1 1v10.755S12 11 8 11s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"/>
@@ -121,7 +134,7 @@
                                             <div class="col-md-7">
                                                 <div class="card-body">
                                                     <h5 class="card-title post-item text-center">
-                                                        <a href="profile/{{ $user->id }}">
+                                                        <a href="profile/{{ $user->id }}/details">
                                                             <div class="post-title">
                                                                 <p class="card-text ps-2"><small class="text-muted">{{ $user->name }}</small></p>
                                                             </div>
@@ -133,11 +146,11 @@
                                                 <div class="card-body">
                                                     <form action="{{ url('/follow-unfollow/'.$user->id) }}" method="POST">
                                                         @csrf
-                                                        @if (in_array($user->id, $following_ids->toArray()) && !in_array($auth_user_id, $user->following_ids->toArray()))
+                                                        @if (in_array($user->id, $following_ids->toArray()) && !in_array($auth_user->id, $user->following_ids->toArray()))
                                                             <button type="submit" class="btn btn-primary">
                                                                 Follow Back
                                                             </button>
-                                                        @elseif(in_array($auth_user_id, $user->following_ids->toArray()))
+                                                        @elseif(in_array($auth_user->id, $user->following_ids->toArray()))
                                                             <button type="submit" class="btn btn-secondary">
                                                                 Unfollow
                                                             </button>

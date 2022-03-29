@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
-     */
     public function index()
     {
         $users = User::with('followers', 'following')
@@ -25,52 +20,17 @@ class ProfileController extends Controller
         return view('profile', [
             'auth_user' => Auth::user(),
             'following_ids' => Auth::user()->following_ids,
-            'auth_user_id' => Auth::id(),
             'users' => $users,
-            ]);
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
-     */
     public function show($id)
     {
         $user = User::find($id);
-//        $posts = $user->posts->paginate(3);
         $posts = Post::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(3);
         return view('user_profile_details', ['user' => $user, 'posts' => $posts]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
-     */
     public function edit($id)
     {
         return view('edit_profile', ['user' => Auth::user()]);
@@ -78,29 +38,27 @@ class ProfileController extends Controller
 
     public function update(ProfileRequest $request, $id)
     {
-        $user = User::find($id);
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar');
-            $avatar_name = $avatar->getClientOriginalName();
-            $avatar->move(public_path('images'), $avatar_name);
-            User::where('id', $id)
-                ->update(['name' => $request->name, 'email' => $request->email, 'password' => Hash::make($request->password), 'avatar_path' => $avatarName]);
-            return redirect('/profile');
-        }
         User::where('id', $id)
             ->update(['name' => $request->name, 'email' => $request->email, 'password' => Hash::make($request->password)]);
         return redirect('/profile');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+    public function updateAvatar(Request $request, $id) {
+        $request->validate([
+            'avatar' => 'required|image',
+        ]);
+        if ($request->hasFile('avatar')) {
+            $user = User::find($id);
+            if ($user->avatar_path !== "") {
+                unlink(public_path('images/avatar/'.$user->avatar_path));
+            }
+            $avatar = $request->file('avatar');
+            $avatar_name = $avatar->getClientOriginalName();
+            $avatar->move(public_path('images/avatar'), $avatar_name);
+            User::where('id', $id)
+                ->update(['avatar_path' => $avatar_name]);
+            return redirect('/profile');
+        }
     }
 
     public function allUsers() {
@@ -115,8 +73,8 @@ class ProfileController extends Controller
     public function followOrUnfollow($id) {
 
         $follower_and_followed_user = Follower::where('user_id', Auth::id())
-                                            ->where('following', $id)
-                                            ->first();
+            ->where('following', $id)
+            ->first();
         if ($follower_and_followed_user === null) {
             $auth_user = User::find(Auth::id());
             $auth_user->followers()->create(["following" => $id]);
@@ -126,5 +84,5 @@ class ProfileController extends Controller
         return redirect()->back();
 
     }
-
 }
+

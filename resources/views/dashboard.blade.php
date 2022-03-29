@@ -40,7 +40,7 @@
                     <div class="card mb-3">
                         <div class="row g-0">
                             <div class="col-md-2">
-                                <a href="profile/{{ $post->user->id }}">
+                                <a href="profile/{{ $post->user->id }}/details">
                                     @if($post->user->avatar_path !== '')
                                         <img src="{{ 'images/'.$post->user->avatar_path }}" class="img-fluid rounded-start" alt="...">
                                     @else
@@ -50,7 +50,7 @@
                                         </svg>
                                     @endif
                                 </a>
-                                <a href="profile/{{ $post->user->id }}">
+                                <a href="profile/{{ $post->user->id }}/details">
                                     <p class="card-text ps-2"><small class="text-muted">{{ $post->user->name }}</small></p>
                                 </a>
                             </div>
