@@ -15,8 +15,8 @@ class ProfileController extends Controller
     public function index()
     {
         $auth_user = Auth::user();
-        $followers = $auth_user->followers()->get();
-        $following = $auth_user->following()->get();
+        $followers = count($auth_user->followers()->get())/*toArray()->count()*/;
+        $following = count($auth_user->following()->get())/*toArray()->count()*/;
         $posts = $auth_user->posts()->paginate(3);
 
         return view('profile', [
@@ -34,7 +34,7 @@ class ProfileController extends Controller
         return view('user_profile_details', ['user' => $user, 'posts' => $posts]);
     }
 
-    public function edit($id)
+    public function edit()
     {
         return view('edit_profile', ['user' => Auth::user()]);
     }
@@ -65,8 +65,8 @@ class ProfileController extends Controller
     }
 
     public function allUsers() {
-        $users = User::with('followers', 'following')->where('id', '<>', Auth::id())->paginate(3);
         $auth_user = Auth::user();
+        $users = User::where('id', '<>', $auth_user->id)->paginate(3);
 
         return view('users_list', [
             'users' => $users,
@@ -77,7 +77,7 @@ class ProfileController extends Controller
     public function followOrUnfollow($id) {
         $auth_user = Auth::user();
         $user_to_follow_or_unfollow = User::where('id', $id)->first();
-        $check_following_existence = Auth::user()->followers()->where('following', '=' , $id)->first();
+        $check_following_existence = $auth_user->followers()->where('following', '=' , $id)->first();
 
         if ($check_following_existence === null) {
             $auth_user->followers()->attach($user_to_follow_or_unfollow->id);
@@ -93,7 +93,7 @@ class ProfileController extends Controller
         return view('followers', [
             'auth_user' => $auth_user,
             'following_users' => $following_users,
-            ]);
+        ]);
     }
 
     public function displayFollowings() {

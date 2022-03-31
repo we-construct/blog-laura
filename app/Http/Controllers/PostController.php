@@ -17,18 +17,19 @@ class PostController extends Controller
      */
     public function index()
     {
-        $auth_user_followings_array = Auth::user()->followers->pluck('id')->toArray();
-        array_push($auth_user_followings_array, Auth::id());
+        $auth_user = Auth::user();
+        $auth_user_followings_array = $auth_user->followers->pluck('id')->toArray();
+        array_push($auth_user_followings_array, $auth_user->id);
 
         $posts = Post::whereIn('user_id', $auth_user_followings_array)->orderBy('created_at', 'desc')->paginate(3);
 
-        return view('dashboard', ['posts' => $posts, 'userId' => Auth::id()]);
+        return view('dashboard', ['posts' => $posts, 'userId' => $auth_user->id]);
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function create()
     {
@@ -43,12 +44,17 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        $post = Post::create([
+//        $post = Post::create([
+//            'title' => $request->post_title,
+//            'content' => $request->post_content,
+//        ]);
+//        $post->user()->associate(Auth::id());
+//        $post->save();
+
+        Auth::user()->posts()->create([
             'title' => $request->post_title,
             'content' => $request->post_content,
         ]);
-        $post->user()->associate(Auth::id());
-        $post->save();
         return redirect()->route('dashboard');
     }
 

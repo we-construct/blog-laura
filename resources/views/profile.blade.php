@@ -39,7 +39,7 @@
                         <p class="mt-2">{{ $auth_user->name }}</p>
                         <p>{{ $auth_user->email }}</p>
 
-                        <a href="profile/{{$auth_user->id}}/edit" class="form-edit">
+                        <a href="profile/edit" class="form-edit">
                             <button class="btn btn-outline-primary">Edit</button>
                         </a>
                     </div>
@@ -49,7 +49,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-3">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="container">
-                        <h4>Followers - {{ count($followings) }}</h4>
+                        <h4>Followers - {{ $followings }}</h4>
                         <a href="profile/followers"> Show all</a>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-3">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="container">
-                        <h4>Following - {{ count($followers) }}</h4>
+                        <h4>Following - {{ $followers }}</h4>
                         <a href="profile/followings"> Show all</a>
                     </div>
                 </div>
