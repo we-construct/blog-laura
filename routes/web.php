@@ -15,9 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [ProfileController::class, 'initialPage']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('profile', [ProfileController::class, 'index'])->name('profile');
@@ -27,6 +25,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/all-users', [ProfileController::class, 'allUsers'])->name('all-users');
     Route::put('/update-avatar/{userId}', [ProfileController::class, 'updateAvatar'])->name('update-avatar');
     Route::post('/follow-unfollow/{userId}', [ProfileController::class, 'followOrUnfollow'])->name('follow-unfollow');
+    Route::get('/profile/followers', [ProfileController::class, 'displayFollowers']);
+    Route::get('/profile/followings', [ProfileController::class, 'displayFollowings']);
+
     Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
     Route::resource('posts', PostController::class);
     Route::get('/my-posts/{userId}', [PostController::class, 'myPosts']);

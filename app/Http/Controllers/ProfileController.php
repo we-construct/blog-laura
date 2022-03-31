@@ -14,13 +14,16 @@ class ProfileController extends Controller
 {
     public function index()
     {
-        $users = User::with('followers', 'following')
-            ->where('id', '<>', Auth::id())
-            ->paginate(2);
+        $auth_user = Auth::user();
+        $followers = $auth_user->followers()->get();
+        $following = $auth_user->following()->get();
+        $posts = $auth_user->posts()->paginate(3);
+
         return view('profile', [
-            'auth_user' => Auth::user(),
-            'following_ids' => Auth::user()->following_ids,
-            'users' => $users,
+            'auth_user' => $auth_user,
+            'followers' => $followers,
+            'followings' => $following,
+            'posts' => $posts,
         ]);
     }
 
@@ -63,24 +66,50 @@ class ProfileController extends Controller
 
     public function allUsers() {
         $users = User::with('followers', 'following')->where('id', '<>', Auth::id())->paginate(3);
+        $auth_user = Auth::user();
+
         return view('users_list', [
             'users' => $users,
-            'following_ids' => Auth::user()->following_ids,
-            'auth_user_id' => Auth::id(),
+            'auth_user' => $auth_user,
         ]);
     }
 
     public function followOrUnfollow($id) {
+        $auth_user = Auth::user();
+        $user_to_follow_or_unfollow = User::where('id', $id)->first();
+        $check_following_existence = Auth::user()->followers()->where('following', '=' , $id)->first();
 
-        $follower_and_followed_user = Auth::user()->followers()->where('following', '=' , $id)->first();
-
-        if ($follower_and_followed_user === null) {
-            $auth_user = User::find(Auth::id());
-            $auth_user->followers()->create(["following" => $id]);
+        if ($check_following_existence === null) {
+            $auth_user->followers()->attach($user_to_follow_or_unfollow->id);
         } else {
-            $follower_and_followed_user->delete();
+            $auth_user->followers()->detach($user_to_follow_or_unfollow->id);
         }
         return redirect()->back();
+    }
+
+    public function displayFollowers() {
+        $auth_user = Auth::user();
+        $following_users = $auth_user->following()->paginate(3);
+        return view('followers', [
+            'auth_user' => $auth_user,
+            'following_users' => $following_users,
+            ]);
+    }
+
+    public function displayFollowings() {
+        $auth_user = Auth::user();
+        $followed_users = $auth_user->followers()->paginate(3);
+        return view('followings', [
+            'auth_user' => $auth_user,
+            'followed_users' => $followed_users,
+        ]);
+    }
+
+    public function initialPage() {
+        if (Auth::user()) {
+            return redirect('/dashboard');
+        }
+        return view('welcome');
     }
 }
 

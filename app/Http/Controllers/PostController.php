@@ -17,8 +17,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')->paginate(3);
-        return view('dashboard', ['posts' => $posts, 'userId' => Auth::id(), ]);
+        $auth_user_followings_array = Auth::user()->followers->pluck('id')->toArray();
+        array_push($auth_user_followings_array, Auth::id());
+
+        $posts = Post::whereIn('user_id', $auth_user_followings_array)->orderBy('created_at', 'desc')->paginate(3);
+
+        return view('dashboard', ['posts' => $posts, 'userId' => Auth::id()]);
     }
 
     /**

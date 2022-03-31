@@ -1,6 +1,6 @@
 .bg-image {
     background-image: url("../images/blog-main-background.jpg");
-    height: 40vh;
+    height: 100vh;
     min-height: 275px;
     background-repeat: no-repeat;
     background-position: center;

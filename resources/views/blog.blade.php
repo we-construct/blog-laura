@@ -14,7 +14,7 @@
     </head>
     <body>
     <div class="bg-image">
-        <div class="bg-opacity d-flex flex-column justify-content-end">
+        <div class="bg-opacity d-flex flex-column justify-content-center">
             <div class="container">
                 <div class="row d-flex justify-content-end">
                     <form method="POST" action="{{ route('logout') }}" class="logout-form">

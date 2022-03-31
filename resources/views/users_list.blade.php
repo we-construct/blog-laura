@@ -38,11 +38,11 @@
                                 <div class="card-body">
                                     <form action="{{ url('/follow-unfollow/'.$user->id) }}" method="POST">
                                         @csrf
-                                        @if (in_array($user->id, $following_ids->toArray()) && !in_array($auth_user_id, $user->following_ids->toArray()))
+                                        @if (in_array($user->id, $auth_user->following_ids->toArray()) && !in_array($auth_user->id, $user->following_ids->toArray()))
                                             <button type="submit" class="btn btn-primary">
                                                 Follow Back
                                             </button>
-                                        @elseif(in_array($auth_user_id, $user->following_ids->toArray()))
+                                        @elseif(in_array($auth_user->id, $user->following_ids->toArray()))
                                             <button type="submit" class="btn btn-secondary">
                                                 Unfollow
                                             </button>
