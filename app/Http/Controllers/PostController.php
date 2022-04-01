@@ -130,4 +130,12 @@ class PostController extends Controller
         }
         return redirect()->back();
     }
+
+    public function likedPosts() {
+        $auth_user = Auth::user();
+        $posts = $auth_user->liked_posts()->paginate(3);
+        $liked_posts = $auth_user->liked_posts->pluck('id')->toArray();
+
+        return view('liked_posts', ['posts' => $posts, 'userId' => $auth_user->id, 'liked_posts' => $liked_posts]);
+    }
 }
