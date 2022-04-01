@@ -72,8 +72,13 @@ class PostController extends Controller
     public function edit($id)
     {
         $postItem = Post::find($id);
-        return view('post_item')->with('postItem', $postItem)
-            ->with('user_id', Auth::id());
+        if ($postItem->user_id === Auth::id()) {
+            return view('post_item')->with('postItem', $postItem)
+                ->with('user_id', Auth::id());
+        }
+        else {
+            return redirect('posts/'.$id);
+        }
     }
 
     /**
