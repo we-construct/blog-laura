@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,8 +23,9 @@ class PostController extends Controller
         array_push($auth_user_followings_array, $auth_user->id);
 
         $posts = Post::whereIn('user_id', $auth_user_followings_array)->orderBy('created_at', 'desc')->paginate(3);
+        $liked_posts = $auth_user->liked_posts->pluck('id')->toArray();
 
-        return view('dashboard', ['posts' => $posts, 'userId' => $auth_user->id]);
+        return view('dashboard', ['posts' => $posts, 'userId' => $auth_user->id, 'liked_posts' => $liked_posts,]);
     }
 
     /**
@@ -115,7 +117,17 @@ class PostController extends Controller
 
     public function allPosts() {
         $posts = Post::paginate(3);
-//        dd($posts);
         return view('all_posts', ['posts' => $posts]);
+    }
+
+    public function likeOrDislike($id) {
+        $auth_user = Auth::user();
+
+        if ($auth_user->liked_posts()->where('post_id', $id)->first() === null) {
+            $auth_user->liked_posts()->attach($id);
+        } else {
+            $auth_user->liked_posts()->detach($id);
+        }
+        return redirect()->back();
     }
 }

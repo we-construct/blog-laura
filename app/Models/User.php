@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
@@ -59,5 +59,21 @@ class User extends Authenticatable
     public function getFollowingIdsAttribute()
     {
         return $this->following->pluck('id');
+    }
+
+    public function likes() {
+        return $this->hasMany(Like::class);
+    }
+
+    public function liked_posts()
+    {
+        return $this->belongsToMany(
+            Post::class,
+            'likes',
+            'user_id',
+            'post_id',
+            'id',
+            'id',
+        );
     }
 }

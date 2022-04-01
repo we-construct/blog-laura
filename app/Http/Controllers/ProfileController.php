@@ -18,12 +18,14 @@ class ProfileController extends Controller
         $followers = $auth_user->followers->count();
         $following = $auth_user->following->count();
         $posts = $auth_user->posts()->paginate(3);
+        $liked_posts = $auth_user->liked_posts->pluck('id')->toArray();
 
         return view('profile', [
             'auth_user' => $auth_user,
             'followers' => $followers,
             'followings' => $following,
             'posts' => $posts,
+            'liked_posts' => $liked_posts,
         ]);
     }
 

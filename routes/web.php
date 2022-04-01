@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
     Route::resource('posts', PostController::class);
+    Route::post('/like/{postId}', [PostController::class, 'likeOrDislike'])->name('like');
     // TODO
 });
 
