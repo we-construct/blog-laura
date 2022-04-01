@@ -98,7 +98,7 @@
                                         </h5>
                                         <p class="card-text">{{ $post->content }}</p>
                                         {{--                                                @if($post->user_id === $userId)--}}
-                                        <a href="posts/{{ $post->id }}" class="btn btn-primary">Edit</a>
+                                        <a href="posts/{{ $post->id }}/edit" class="btn btn-primary">Edit</a>
                                         <form action="/posts/{{ $post->id }}" method="POST" class="form-delete">
                                             @csrf
                                             @method('DELETE')

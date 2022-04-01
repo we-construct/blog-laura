@@ -44,13 +44,6 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-//        $post = Post::create([
-//            'title' => $request->post_title,
-//            'content' => $request->post_content,
-//        ]);
-//        $post->user()->associate(Auth::id());
-//        $post->save();
-
         Auth::user()->posts()->create([
             'title' => $request->post_title,
             'content' => $request->post_content,
@@ -113,5 +106,11 @@ class PostController extends Controller
     public function myPosts($userId) {
         $posts = Post::where('user_id', $userId)->orderBy('created_at', 'desc')->paginate(3);
         return view('my_posts')->with('posts', $posts);
+    }
+
+    public function allPosts() {
+        $posts = Post::paginate(3);
+//        dd($posts);
+        return view('all_posts', ['posts' => $posts]);
     }
 }

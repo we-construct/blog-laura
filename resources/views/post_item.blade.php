@@ -15,7 +15,7 @@
 <body>
 <div class="post-item-main">
     <div class="post-item-opacity d-flex justify-content-center align-items-center">
-        <form action="{{ $postItem->id }}" method="POST">
+        <form action="{{ url('posts/' . $postItem->id) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="container">

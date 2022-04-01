@@ -15,8 +15,8 @@ class ProfileController extends Controller
     public function index()
     {
         $auth_user = Auth::user();
-        $followers = count($auth_user->followers()->get())/*toArray()->count()*/;
-        $following = count($auth_user->following()->get())/*toArray()->count()*/;
+        $followers = $auth_user->followers->count();
+        $following = $auth_user->following->count();
         $posts = $auth_user->posts()->paginate(3);
 
         return view('profile', [

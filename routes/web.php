@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [ProfileController::class, 'initialPage']);
+Route::get('/all-posts', [PostController::class, 'allPosts']);
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -30,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
     Route::resource('posts', PostController::class);
-    Route::get('/my-posts/{userId}', [PostController::class, 'myPosts']);
+    // TODO
 });
 
 require __DIR__.'/auth.php';
