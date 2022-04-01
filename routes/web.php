@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [ProfileController::class, 'initialPage']);
-Route::get('/all-posts', [PostController::class, 'allPosts']);
+Route::get('/all-posts', [PostController::class, 'allPosts'])->name('all-posts');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
