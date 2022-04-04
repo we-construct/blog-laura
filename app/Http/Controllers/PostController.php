@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\PostRequest;
 use App\Models\Like;
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use mysql_xdevapi\Exception;
@@ -62,7 +63,11 @@ class PostController extends Controller
     public function show($id)
     {
         $postItem = Post::find($id);
-        return view('post_details')->with('postItem', $postItem);
+        $comments = $postItem->comments;
+        return view('post_details', [
+            'postItem' => $postItem,
+            'comments' => $comments,
+        ]);
     }
 
     /**
@@ -137,5 +142,18 @@ class PostController extends Controller
         $liked_posts = $auth_user->liked_posts->pluck('id')->toArray();
 
         return view('liked_posts', ['posts' => $posts, 'userId' => $auth_user->id, 'liked_posts' => $liked_posts]);
+    }
+
+    public function countryPosts($id) {
+        $auth_user = Auth::user();
+        $liked_posts = $auth_user->liked_posts->pluck('id')->toArray();
+
+        $user = User::find($id);
+        $posts = Post::whereHas('user', function ($query) use($user) {
+            return $query->where('country', '=', $user->country);
+        })->paginate(3);
+
+        return view('posts_country', ['posts' => $posts, 'userId' => $auth_user->id, 'liked_posts' => $liked_posts, 'country' => $user->country]);
+
     }
 }

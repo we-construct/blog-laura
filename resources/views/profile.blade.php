@@ -38,6 +38,7 @@
 
                         <p class="mt-2">{{ $auth_user->name }}</p>
                         <p>{{ $auth_user->email }}</p>
+                        <p><a href="{{ url("/country-posts/".$auth_user->id) }}">{{ $auth_user->country }}</a></p>
 
                         <a href="profile/edit" class="form-edit">
                             <button class="btn btn-outline-primary">Edit</button>
@@ -97,14 +98,12 @@
                                             </a>
                                         </h5>
                                         <p class="card-text">{{ $post->content }}</p>
-                                        {{--                                                @if($post->user_id === $userId)--}}
                                         <a href="posts/{{ $post->id }}/edit" class="btn btn-primary">Edit</a>
                                         <form action="/posts/{{ $post->id }}" method="POST" class="form-delete">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-secondary" type="submit">Delete</button>
                                         </form>
-                                        {{--                                                @endif--}}
                                         <p class="card-text text-end"><small class="text-muted">Created at {{ date_format($post->created_at,"Y/m/d") }}</small></p>
                                         <form action="/like/{{ $post->id }}" method="POST">
                                             @csrf

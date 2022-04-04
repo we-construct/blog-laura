@@ -44,7 +44,7 @@ class ProfileController extends Controller
     public function update(ProfileRequest $request, $id)
     {
         User::where('id', $id)
-            ->update(['name' => $request->name, 'email' => $request->email, 'password' => Hash::make($request->password)]);
+            ->update(['name' => $request->name, 'email' => $request->email, 'password' => Hash::make($request->password), 'country' => $request->country]);
         return redirect('/profile');
     }
 

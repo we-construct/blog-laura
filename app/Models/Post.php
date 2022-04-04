@@ -32,6 +32,22 @@ class Post extends Model
             'user_id',
             'id',
             'id',
-        );
+        )->withTimestamps();
+    }
+
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function comment_users()
+    {
+        return $this->belongsToMany(
+            User::class,
+            'comments',
+            'post_id',
+            'user_id',
+            'id',
+            'id',
+        )->withTimestamps();
     }
 }

@@ -43,6 +43,15 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-2 mt-2">
+                                    <label for="country">Country</label>
+                                </div>
+                                <div class="col-md-4 mt-2">
+                                    <input type="text" name="country" id="country" value="{{ old('country')?? $user->country }}">
+                                    <small class="text-danger">@error('country'){{$message}}@enderror</small>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 mt-2">
                                     <label for="password">Password</label>
                                 </div>
                                 <div class="col-md-4 mt-2">

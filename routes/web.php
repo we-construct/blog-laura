@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -28,12 +29,13 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/follow-unfollow/{userId}', [ProfileController::class, 'followOrUnfollow'])->name('follow-unfollow');
     Route::get('/profile/followers', [ProfileController::class, 'displayFollowers']);
     Route::get('/profile/followings', [ProfileController::class, 'displayFollowings']);
-
+    Route::get('/country-posts/{userId}', [PostController::class, 'countryPosts']);
     Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
     Route::resource('posts', PostController::class);
     Route::post('/like/{postId}', [PostController::class, 'likeOrDislike'])->name('like');
     Route::get('/liked-posts', [PostController::class, 'likedPosts'])->name('liked-posts');
     // TODO
+    Route::resource('comments', CommentController::class);
 });
 
 require __DIR__.'/auth.php';

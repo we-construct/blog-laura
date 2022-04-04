@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'country',
     ];
 
     protected $appends = ['following_ids'];
@@ -62,7 +63,7 @@ class User extends Authenticatable
     }
 
     public function likes() {
-        return $this->hasMany(Like::class);
+        return $this->hasMany(Like::class)->withTimestamps();
     }
 
     public function liked_posts()
@@ -75,5 +76,17 @@ class User extends Authenticatable
             'id',
             'id',
         );
+    }
+
+    public function comment_posts()
+    {
+        return $this->belongsToMany(
+            Post::class,
+            'comments',
+            'user_id',
+            'post_id',
+            'id',
+            'id',
+        )->withTimestamps();
     }
 }

@@ -58,7 +58,7 @@
                                                 </svg>
                                             </button>
                                         @endif
-                                        <small>{{ count($post->liked_users) }} likes</small>
+                                        <small>{{ count($post->liked_users) }} likes <a href="posts/{{ $post->id }}"><span class="ms-2">3 comments</span></a></small>
                                     </form>
                                 </div>
                             </div>

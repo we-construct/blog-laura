@@ -1,19 +1,9 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Posts from ' .$country) }}
         </h2>
     </x-slot>
-    <div class="py-2">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <form action="/posts/create" method="GET">
-                        @csrf
-                        <button type="submit">
-                            <h3 class="show-my-posts px-2 btn btn-primary">Add new post</h3>
-                        </button>
-                    </form>
-        </div>
-    </div>
     <div>
         <div class="container">
             @foreach($posts as $post)
@@ -69,7 +59,7 @@
                                                 </svg>
                                             </button>
                                         @endif
-                                        <small>{{ count($post->liked_users) }} likes <a href="posts/{{ $post->id }}"><span class="ms-2">{{ count($post->comments) }} comments</span></a></small>
+                                        <small>{{ count($post->liked_users) }} likes <a href="{{ url('/posts/'.$post->id) }}"><span class="ms-2">{{ count($post->comments) }} comments</span></a></small>
                                     </form>
                                 </div>
                             </div>
