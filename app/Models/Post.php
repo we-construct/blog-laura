@@ -15,6 +15,8 @@ class Post extends Model
         'content',
     ];
 
+    protected $appends = ['users_liked'];
+
     public function user() {
         return $this->belongsTo(User::class);
     }
@@ -49,5 +51,10 @@ class Post extends Model
             'id',
             'id',
         )->withTimestamps();
+    }
+
+    public function getUsersLikedAttribute()
+    {
+        return $this->liked_users->pluck('id')->toArray();
     }
 }

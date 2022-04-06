@@ -146,11 +146,10 @@ class PostController extends Controller
 
     public function countryPosts($id) {
         $auth_user = Auth::user();
-        $liked_posts = $auth_user->liked_posts->pluck('id')->toArray();
 
         $user = User::find($id);
         $posts = $user->country->posts()->paginate(3);
 
-        return view('posts_country', ['posts' => $posts, 'userId' => $auth_user->id, 'liked_posts' => $liked_posts, 'country' => $user->country]);
+        return view('posts_country', ['posts' => $posts, 'userId' => $auth_user->id, 'country' => $user->country]);
     }
 }
