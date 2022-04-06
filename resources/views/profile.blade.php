@@ -38,7 +38,7 @@
 
                         <p class="mt-2">{{ $auth_user->name }}</p>
                         <p>{{ $auth_user->email }}</p>
-                        <p><a href="{{ url("/country-posts/".$auth_user->id) }}">{{ $auth_user->country }}</a></p>
+                        <p><a href="{{ url("/country-posts/".$auth_user->id) }}">{{ $auth_user->country->country?? '' }}</a></p>
 
                         <a href="profile/edit" class="form-edit">
                             <button class="btn btn-outline-primary">Edit</button>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileRequest;
+use App\Models\Country;
 use App\Models\Follower;
 use App\Models\Post;
 use App\Models\User;
@@ -38,13 +39,16 @@ class ProfileController extends Controller
 
     public function edit()
     {
-        return view('edit_profile', ['user' => Auth::user()]);
+        $countries = Country::all();
+        return view('edit_profile', ['user' => Auth::user(), 'countries' => $countries]);
     }
 
     public function update(ProfileRequest $request, $id)
     {
-        User::where('id', $id)
-            ->update(['name' => $request->name, 'email' => $request->email, 'password' => Hash::make($request->password), 'country' => $request->country]);
+        $auth_user = Auth::user();
+        $country = Country::find($request->country);
+        $auth_user->country()->associate($country);
+        $auth_user->update(['name' => $request->name, 'email' => $request->email, 'password' => Hash::make($request->password)]);
         return redirect('/profile');
     }
 

@@ -24,7 +24,7 @@
                         <br>
                         <h4>{{ $user->name }}</h4>
                         <p>{{ $user->email }}</p>
-                        <p><a href="{{ url("/country-posts/".$user->id) }}">{{ $user->country }}</a></p>
+                        <p><a href="{{ url("/country-posts/".$user->id) }}">{{ $user->country->country }}</a></p>
 
                         <div>
                             @foreach($posts as $post)

@@ -149,11 +149,8 @@ class PostController extends Controller
         $liked_posts = $auth_user->liked_posts->pluck('id')->toArray();
 
         $user = User::find($id);
-        $posts = Post::whereHas('user', function ($query) use($user) {
-            return $query->where('country', '=', $user->country);
-        })->paginate(3);
+        $posts = $user->country->posts()->paginate(3);
 
         return view('posts_country', ['posts' => $posts, 'userId' => $auth_user->id, 'liked_posts' => $liked_posts, 'country' => $user->country]);
-
     }
 }

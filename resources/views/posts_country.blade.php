@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Posts from ' .$country) }}
+            {{ __('Posts from ' .$country->country) }}
         </h2>
     </x-slot>
     <div>
@@ -11,7 +11,7 @@
                     <div class="card mb-3">
                         <div class="row g-0">
                             <div class="col-md-2">
-                                <a href="profile/{{ $post->user->id }}/details">
+                                <a href="{{ url('profile/'.$post->user->id.'/details') }}">
                                     @if($post->user->avatar_path !== '')
                                         <img src="{{ 'images/avatar/'.$post->user->avatar_path }}" class="img-fluid rounded-start" alt="...">
                                     @else

@@ -20,9 +20,11 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('avatar_path')->default('');
-            $table->string('country')->nullable();
+            $table->unsignedBigInteger('country_id')->nullable();
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('country_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

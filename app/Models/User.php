@@ -89,4 +89,8 @@ class User extends Authenticatable
             'id',
         )->withTimestamps();
     }
+
+    public function country() {
+        return $this->belongsTo(Country::class);
+    }
 }
