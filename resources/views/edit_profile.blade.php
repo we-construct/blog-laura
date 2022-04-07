@@ -49,7 +49,7 @@
                                     <select name="country" id="country" class="form-select">
                                         <option>Choose your country</option>
                                         @foreach($countries as $country)
-                                            <option value="{{ $country->id }}"> {{ $country->country }} </option>
+                                            <option value="{{ $country->id }}" {{in_array($user->id, $country->users_ids)? "selected" : ''}}> {{ $country->country }} </option>
                                         @endforeach
                                     </select>
                                     <small class="text-danger">@error('country'){{$message}}@enderror</small>
