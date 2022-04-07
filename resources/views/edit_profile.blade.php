@@ -60,7 +60,7 @@
                                     <label for="password">Password</label>
                                 </div>
                                 <div class="col-md-4 mt-2">
-                                    <input type="password" name="password" id="password" value="{{ old('password')?? $user->password }}">
+                                    <input type="password" name="password" id="password" value="">
                                     <br>
                                     <small class="text-danger">@error('password'){{$message}}@enderror</small>
                                 </div>
@@ -70,7 +70,7 @@
                                     <label for="confirm-password">Confirm password</label>
                                 </div>
                                 <div class="col-md-4 mt-2">
-                                    <input type="password" name="password_confirmation" id="confirm-password" value="{{ old('password_confirmation')?? $user->password }}">
+                                    <input type="password" name="password_confirmation" id="confirm-password" value="">
                                     <br>
                                     <small class="text-danger">@error('password_confirmation'){{$message}}@enderror</small>
                                 </div>
