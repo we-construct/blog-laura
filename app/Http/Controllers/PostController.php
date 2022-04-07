@@ -24,9 +24,11 @@ class PostController extends Controller
         array_push($auth_user_followings_array, $auth_user->id);
 
         $posts = Post::whereIn('user_id', $auth_user_followings_array)->orderBy('created_at', 'desc')->paginate(3);
-        $liked_posts = $auth_user->liked_posts->pluck('id')->toArray();
 
-        return view('dashboard', ['posts' => $posts, 'userId' => $auth_user->id, 'liked_posts' => $liked_posts,]);
+        return view('dashboard', [
+            'posts' => $posts,
+            'userId' => $auth_user->id
+            ]);
     }
 
     /**
@@ -139,9 +141,11 @@ class PostController extends Controller
     public function likedPosts() {
         $auth_user = Auth::user();
         $posts = $auth_user->liked_posts()->paginate(3);
-        $liked_posts = $auth_user->liked_posts->pluck('id')->toArray();
 
-        return view('liked_posts', ['posts' => $posts, 'userId' => $auth_user->id, 'liked_posts' => $liked_posts]);
+        return view('liked_posts', [
+            'posts' => $posts,
+            'userId' => $auth_user->id
+        ]);
     }
 
     public function countryPosts($id) {
