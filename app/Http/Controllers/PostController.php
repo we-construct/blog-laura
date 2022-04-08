@@ -156,4 +156,35 @@ class PostController extends Controller
 
         return view('posts_country', ['posts' => $posts, 'userId' => $auth_user->id, 'country' => $user->country]);
     }
+
+    public function searchUsers(Request $request) {
+        $search_text = $request->search;
+        $pattern = '%' . $search_text . '%';
+        $users = User::where('name', 'LIKE', $pattern)
+            ->orWhere('email', 'LIKE', $pattern)
+            ->paginate(3);
+        $no_any_user = !$users->isEmpty();
+
+        return view('search_users', [
+            'search_text' => $search_text,
+            'users' => $users,
+            'auth_user' => Auth::user(),
+            'no_any_user' => $no_any_user,
+        ]);
+    }
+
+    public function searchPosts(Request $request) {
+        $search_text = $request->search;
+        $pattern = '%' . $search_text . '%';
+        $posts = Post::where('content', 'LIKE', $pattern)
+            ->orWhere('title', 'LIKE', $pattern)
+            ->paginate(3);
+        $no_any_post = !$posts->isEmpty();
+        return view('search_posts', [
+            'search_text' => $search_text,
+            'posts' => $posts,
+            'userId' => Auth::id(),
+            'no_any_post' => $no_any_post,
+        ]);
+    }
 }
