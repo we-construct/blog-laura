@@ -30,9 +30,16 @@ class ProfileController extends Controller
 
     public function show($id)
     {
+        $auth_userId = Auth::id();
         $user = User::find($id);
         $posts = Post::where('user_id', $id)->orderBy('created_at', 'desc')->paginate(3);
-        return view('user_profile_details', ['user' => $user, 'posts' => $posts]);
+        $comments = $user->comments;
+        return view('user_profile_details', [
+            'user' => $user,
+            'posts' => $posts,
+            'comments' => $comments,
+            'auth_userId' => $auth_userId,
+        ]);
     }
 
     public function edit()

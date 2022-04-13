@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Post details') }}
+            {{ __('Comments') }}
         </h2>
     </x-slot>
 
@@ -10,29 +10,10 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="container">
-                        <div class="row mb-4">
-                            @foreach($images as $image)
-                                <div class="col-md-2">
-                                    <img src="{{ asset('images/posts/' . $image->image_path) }}" alt=""  class="post-image">
-                                    <a href="{{ url('/comments/' . $image->id) }}"> {{ count($image->comments) }} comments</a>
+                        <div class="row">
+                                <div class="col-md-7">
+                                    <img src="{{ asset('images/posts/' . $image->image_path) }}" alt="">
                                 </div>
-                            @endforeach
-                        </div>
-                        <div class="row">
-                            <div class="col-md-7">
-                                <label for="post-item-title" class="post-item-label">Title</label>
-                            </div>
-                            <div class="col-md-7">
-                                <div type="text" id="post-item-title" class="post-item-input"> {{ $postItem->title }} </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-7">
-                                <label for="post-item-content" class="post-item-label">Content</label>
-                            </div>
-                            <div class="col-md-7">
-                                <div id="post-item-content" class="post-item-input post-item-content ps-2">{{ $postItem->content }}</div>
-                            </div>
                         </div>
 
                         <p class="mt-4 mb-2 text-muted">Comments</p>
@@ -80,7 +61,7 @@
                             <div class="col-md-8 px-0">
                                 <form action="{{ route('comments.store') }}" method="POST">
                                     @csrf
-                                    <input type="hidden" name="postId" value="{{ $postItem->id }}">
+                                    <input type="hidden" name="imageId" value="{{ $image->id }}">
                                     <textarea name="comment" id="" cols="80" rows="2" class="mt-4"></textarea>
                                     <div>
                                         <small class="text-danger">@error('comment'){{$message}}@enderror</small>

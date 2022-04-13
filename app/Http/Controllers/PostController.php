@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
+use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
@@ -23,7 +24,11 @@ class PostController extends Controller
         $auth_user_followings_array = $auth_user->followers->pluck('id')->toArray();
         array_push($auth_user_followings_array, $auth_user->id);
 
-        $posts = Post::whereIn('user_id', $auth_user_followings_array)->orderBy('created_at', 'desc')->paginate(3);
+        $posts = Post::with(['image' => function($query) {
+            $query->where('main', '=', true);
+        }])->whereIn('user_id', $auth_user_followings_array)
+            ->orderBy('created_at', 'desc')
+            ->paginate(3);
 
         return view('dashboard', [
             'posts' => $posts,
@@ -49,10 +54,21 @@ class PostController extends Controller
      */
     public function store(PostRequest $request)
     {
-        Auth::user()->posts()->create([
+        $post = Auth::user()->posts()->create([
             'title' => $request->post_title,
             'content' => $request->post_content,
         ]);
+        if ($request->hasFile('images')) {
+            $images = $request->file('images');
+            foreach ($images as $image) {
+                $image_name = $image->getClientOriginalName();
+                $image->move(public_path('images/posts'), $image_name);
+                $post->image()->create([
+                    'main' => array_search($image, $images) === 0,
+                    'image_path' => $image_name,
+                ]);
+            }
+        }
         return redirect()->route('dashboard');
     }
 
@@ -64,11 +80,15 @@ class PostController extends Controller
      */
     public function show($id)
     {
+        $auth_userId = Auth::id();
         $postItem = Post::find($id);
         $comments = $postItem->comments;
+        $images = $postItem->image;
         return view('post_details', [
             'postItem' => $postItem,
             'comments' => $comments,
+            'images' => $images,
+            'auth_userId' => $auth_userId,
         ]);
     }
 
@@ -185,6 +205,19 @@ class PostController extends Controller
             'posts' => $posts,
             'userId' => Auth::id(),
             'no_any_post' => $no_any_post,
+        ]);
+    }
+
+    public function searchComments(Request $request) {
+        $search_text = $request->search;
+        $pattern = '%' . $search_text . '%';
+        $comments = Comment::where('comment', 'LIKE', $pattern)->paginate(3);
+        $no_any_comment = !$comments->isEmpty();
+        return view('search_comments', [
+            'search_text' => $search_text,
+            'comments' => $comments,
+            'userId' => Auth::id(),
+            'no_any_comment' => $no_any_comment,
         ]);
     }
 }

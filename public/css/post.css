@@ -7,11 +7,6 @@
     margin: 0;
 }
 
-/*.post-item {*/
-/*    border: 2px solid #0d6efd;*/
-/*    border-radius: 20px;*/
-/*}*/
-
 .post-item a {
     text-decoration: none;
     color: black;
@@ -28,10 +23,6 @@
     text-decoration-color: #0d6efd;
     text-decoration-thickness: 3px;
 }
-
-/*.form-edit button {*/
-/*    width: 100%;*/
-/*}*/
 
 .form-delete {
     width: fit-content;
@@ -55,7 +46,6 @@
 }
 
 .post-item-label {
-    /*color: white;*/
     font-size: 18px;
     font-weight: bold;
 }
@@ -71,6 +61,14 @@
     border-radius: 5px;
 }
 
-.comment {
-    border-bottom: 1px solid gray;
+.edit-a {
+    text-decoration: none;
+}
+
+.created {
+    font-size: 14px;
+}
+
+.avatar-comment {
+    border-radius: 25px 25px;
 }

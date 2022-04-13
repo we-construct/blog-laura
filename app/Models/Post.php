@@ -17,6 +17,8 @@ class Post extends Model
 
     protected $appends = ['users_liked'];
 
+    protected $morphClass = 'Post';
+
     public function user() {
         return $this->belongsTo(User::class);
     }
@@ -37,7 +39,7 @@ class Post extends Model
         )->withTimestamps();
     }
 
-    public function comments() {
+    public function comments_old() {
         return $this->hasMany(Comment::class);
     }
 
@@ -57,4 +59,15 @@ class Post extends Model
     {
         return $this->liked_users->pluck('id')->toArray();
     }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function image()
+    {
+        return $this->hasMany(PostImage::class);
+    }
 }
+

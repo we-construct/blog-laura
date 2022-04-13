@@ -24,6 +24,7 @@ class PostRequest extends FormRequest
     public function rules()
     {
         return [
+            'images.*' => 'nullable|image',
             'post_title'   => 'required|max:255',
             'post_content' => 'required|max:4294967295',
         ];

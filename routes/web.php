@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/liked-posts', [PostController::class, 'likedPosts'])->name('liked-posts');
     Route::post('/search/users', [PostController::class, 'searchUsers']);
     Route::post('/search/posts', [PostController::class, 'searchPosts']);
+    Route::post('/search/comments', [PostController::class, 'searchComments']);
     Route::resource('posts', PostController::class);
     // TODO
     Route::resource('comments', CommentController::class);

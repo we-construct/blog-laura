@@ -14,6 +14,11 @@
                 <input type="hidden" value="{{ $search_text }}" name="search">
                 <button type="submit" class="ms-3 btn btn-secondary">Posts</button>
             </form>
+            <form action="{{ url('/search/comments') }}" method="POST">
+                @csrf
+                <input type="hidden" value="{{ $search_text }}" name="search">
+                <button type="submit" class="ms-3 btn btn-outline-secondary">Comments</button>
+            </form>
         </div>
     </x-slot>
     <div>

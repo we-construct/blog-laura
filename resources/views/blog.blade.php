@@ -30,9 +30,16 @@
                     </div>
                 </div>
             </div>
-            <form action="{{ url('posts') }}" method="POST" class="form">
+            <form action="{{ url('posts') }}" method="POST" class="form" enctype="multipart/form-data">
                 @csrf
                 <div class="container">
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-6 mt-2">
+                            <label for="images" class="input-label">Images</label>
+                            <input type="file" name="images[]" class="form-control" id="images" multiple>
+                            <small class="text-danger">@error('images.*'){{$message}}@enderror</small>
+                        </div>
+                    </div>
                     <div class="row d-flex justify-content-center">
                         <div class="col-md-6">
                             <label for="post_title" class="input-label">Title</label>

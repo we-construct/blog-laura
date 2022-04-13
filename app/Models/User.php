@@ -26,6 +26,8 @@ class User extends Authenticatable
 
     protected $appends = ['following_ids'];
 
+    protected $morphClass = 'User';
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -92,5 +94,14 @@ class User extends Authenticatable
 
     public function country() {
         return $this->belongsTo(Country::class);
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
+    public function users_comments() {
+        return $this->hasMany(Comment::class, 'user_id', 'id');
     }
 }
