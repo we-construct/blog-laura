@@ -14,7 +14,7 @@
                             @foreach($images as $image)
                                 <div class="col-md-2">
                                     <img src="{{ asset('images/posts/' . $image->image_path) }}" alt=""  class="post-image">
-                                    <a href="{{ url('/comments/' . $image->id) }}"> {{ count($image->comments) }} comments</a>
+                                    <a href="{{ url("/comments/{$image->id}") }}"> {{ count($image->comments) }} comments</a>
                                 </div>
                             @endforeach
                         </div>
@@ -23,7 +23,9 @@
                                 <label for="post-item-title" class="post-item-label">Title</label>
                             </div>
                             <div class="col-md-7">
-                                <div type="text" id="post-item-title" class="post-item-input"> {{ $postItem->title }} </div>
+                                <div type="text" id="post-item-title" class="post-item-input">
+                                    {{ $post_item->title }}
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -31,7 +33,9 @@
                                 <label for="post-item-content" class="post-item-label">Content</label>
                             </div>
                             <div class="col-md-7">
-                                <div id="post-item-content" class="post-item-input post-item-content ps-2">{{ $postItem->content }}</div>
+                                <div id="post-item-content" class="post-item-input post-item-content ps-2">
+                                    {{ $post_item->content }}
+                                </div>
                             </div>
                         </div>
 
@@ -40,27 +44,50 @@
                             <div class="row mt-2">
                                 <div class="col-md-8 comment-container">
                                     <div class="d-flex">
-                                        <a href="{{ url('/profile/' . $comment->users->id . '/details') }}">
+                                        <a href="{{ url("/profile/{$comment->users->id}/details") }}">
                                             <div>
                                                 @if($comment->users->avatar_path !== '')
-                                                    <img src="{{ asset('images/avatar/' . $comment->users->avatar_path) }}" class="rounded-circle mt-1" alt="..." width="30" height="30">
+                                                    <img src="{{ asset('images/avatar/' . $comment->users->avatar_path) }}"
+                                                         class="rounded-circle mt-1"
+                                                         alt="..."
+                                                         width=30
+                                                         height=30
+                                                    />
                                                 @else
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-file-person rounded-circle mt-1" viewBox="0 0 16 16">
-                                                        <path d="M12 1a1 1 0 0 1 1 1v10.755S12 11 8 11s-5 1.755-5 1.755V2a1 1 0 0 1 1-1h8zM4 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H4z"/>
-                                                        <path d="M8 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
-                                                    </svg>
+                                                    <img src="{{ asset('images/icons/no-avatar.svg') }}"
+                                                         class="rounded-circle mt-1"
+                                                         alt="..."
+                                                         width=30
+                                                         height=30
+                                                    />
                                                 @endif
                                             </div>
                                         </a>
-                                        <a href="{{ url('/profile/' . $comment->users->id . '/details') }}">
-                                            <p class="card-text ps-2"><small class="text-muted">{{ $comment->users->name }}</small></p>
+                                        <a href="{{ url("/profile/{$comment->users->id}/details") }}">
+                                            <p class="card-text ps-2">
+                                                <small class="text-muted">
+                                                    {{ $comment->users->name }}
+                                                </small>
+                                            </p>
                                         </a>
                                     </div>
                                     <div class="comment mt-3">{{ $comment->comment }}</div>
-                                    @if($comment->users->id === $auth_userId)
+                                    @if($comment->users->id === $auth_user_id)
                                         <div class="d-flex justify-content-end">
-                                            <a href="{{ url('comments/' . $comment->id . '/edit') }}" class="text-muted edit-a me-3"><span>Edit</span></a>
-                                            <form action="{{ url('/comments/' . $comment->id) }}" method="POST">
+                                            <a href="{{ url("comments/{$comment->id}/edit") }}" class="text-muted edit-a me-3">
+                                                <span>
+                                                    Edit
+                                                </span>
+                                            </a>
+                                            <form action="{{ url("/comments/{$comment->id}") }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input type="submit" value="Delete" class="text-muted">
+                                            </form>
+                                        </div>
+                                    @elseif($post_item->user->id === $auth_user_id)
+                                        <div class="d-flex justify-content-end">
+                                            <form action="{{ url("/comments/{$comment->id}") }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <input type="submit" value="Delete" class="text-muted">
@@ -72,7 +99,6 @@
                                         <span>{{$comment->created_at == $comment->updated_at? 'Created at ' . date_format($comment->created_at, "Y/m/d") : 'Updated at ' . date_format($comment->updated_at, "Y/m/d")}}</span>
                                     </div>
                                 </div>
-
                             </div>
                         @endforeach
 
@@ -80,13 +106,17 @@
                             <div class="col-md-8 px-0">
                                 <form action="{{ route('comments.store') }}" method="POST">
                                     @csrf
-                                    <input type="hidden" name="postId" value="{{ $postItem->id }}">
+                                    <input type="hidden" name="postId" value="{{ $post_item->id }}"/>
                                     <textarea name="comment" id="" cols="80" rows="2" class="mt-4"></textarea>
                                     <div>
-                                        <small class="text-danger">@error('comment'){{$message}}@enderror</small>
+                                        <small class="text-danger">
+                                            @error('comment'){{$message}}@enderror
+                                        </small>
                                     </div>
                                     <div class="mt-1">
-                                        <button type="submit" class="btn btn-primary">Add comment</button>
+                                        <button type="submit" class="btn btn-primary">
+                                            Add comment
+                                        </button>
                                     </div>
                                 </form>
                             </div>
@@ -96,5 +126,4 @@
             </div>
         </div>
     </div>
-
 </x-app-layout>

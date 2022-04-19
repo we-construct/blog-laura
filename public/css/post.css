@@ -72,3 +72,7 @@
 .avatar-comment {
     border-radius: 25px 25px;
 }
+
+.not-found {
+    height: 60vh;
+}

@@ -20,4 +20,9 @@ class PostImage extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }
