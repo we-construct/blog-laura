@@ -32,9 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [PostController::class, 'index'])->name('dashboard');
     Route::post('/like/{postId}', [PostController::class, 'likeOrDislike'])->name('like');
     Route::get('/liked-posts', [PostController::class, 'likedPosts'])->name('liked-posts');
-    Route::post('/search/users', [PostController::class, 'searchUsers']);
-    Route::post('/search/posts', [PostController::class, 'searchPosts']);
-    Route::post('/search/comments', [PostController::class, 'searchComments']);
+    Route::get('/search/users', [PostController::class, 'searchUsers']);
+    Route::get('/search/posts', [PostController::class, 'searchPosts']);
+    Route::get('/search/comments', [PostController::class, 'searchComments']);
     Route::resource('posts', PostController::class);
     // TODO
     Route::resource('comments', CommentController::class);

@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Session;
 
 class ProfileController extends Controller
 {
@@ -53,7 +55,6 @@ class ProfileController extends Controller
             Log::error($e->getMessage());
             abort(404, $e->getMessage());
         }
-
     }
 
     public function edit()
@@ -139,7 +140,6 @@ class ProfileController extends Controller
             } else {
                 $auth_user->followers()->detach($user_to_follow_or_unfollow->id);
             }
-
             return redirect()->back();
         } catch (\Exception $e) {
             Log::error($e->getMessage());

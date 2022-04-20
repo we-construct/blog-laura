@@ -4,23 +4,20 @@
             {{ __('Search for '. '"' . $search_text . '"') }}
         </h2>
         <div class="d-flex mt-3">
-            <form action="{{ url('/search/users') }}" method="POST">
-                @csrf
-                <input type="hidden" value="{{ $search_text }}" name="search"/>
+            <form action="{{ url('/search/users') }}" method="GET">
+                <input type="hidden" value="{{ $search_text }}" name="search_user"/>
                 <button type="submit" class="btn btn-outline-secondary">
                     Users ({{ $users_count }})
                 </button>
             </form>
-            <form action="{{ url('/search/posts') }}" method="POST">
-                @csrf
-                <input type="hidden" value="{{ $search_text }}" name="search"/>
+            <form action="{{ url('/search/posts') }}" method="GET">
+                <input type="hidden" value="{{ $search_text }}" name="search_post"/>
                 <button type="submit" class="ms-3 btn btn-secondary">
-                    Posts ({{ count($posts) }})
+                    Posts ({{ $posts_count }})
                 </button>
             </form>
-            <form action="{{ url('/search/comments') }}" method="POST">
-                @csrf
-                <input type="hidden" value="{{ $search_text }}" name="search"/>
+            <form action="{{ url('/search/comments') }}" method="GET">
+                <input type="hidden" value="{{ $search_text }}" name="search_comment"/>
                 <button type="submit" class="ms-3 btn btn-outline-secondary">
                     Comments ({{ $comments_count }})
                 </button>
@@ -91,7 +88,6 @@
                                         </div>
                                         <form action="{{ url("/like/{$post->id}") }}" method="POST">
                                             @csrf
-                                            @method('POST')
                                             @if(in_array($user_id, $post->users_liked))
                                                 <button type="submit">
                                                     <img src="{{ asset('images/icons/like.svg') }}" alt="" />
@@ -103,7 +99,7 @@
                                             @endif
                                             <small>
                                                 {{ count($post->liked_users) }} likes
-                                                <a href="{{ url('posts/' . $post->id) }}">
+                                                <a href="{{ url("posts/{$post->id}") }}">
                                                     <span class="ms-2">
                                                         {{ count($post->comments) }} comments
                                                     </span>

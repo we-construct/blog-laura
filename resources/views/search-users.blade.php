@@ -4,23 +4,18 @@
             {{ __('Search for '. '"' . $search_text . '"') }}
         </h2>
         <div class="d-flex mt-3">
-            <form action="{{ url('/search/users') }}" method="POST">
-                @csrf
-                <input type="hidden" value="{{ $search_text }}" name="search"/>
-                <button type="submit" class="btn btn-secondary">
-                    Users ({{ count($users) }})
-                </button>
+            <form action="{{ url('/search/users') }}" method="GET">
+                <input type="hidden" value="{{ $search_text }}" name="search_user"/>
+                <button type="submit" class="btn btn-secondary">Users ({{ $users_count }})</button>
             </form>
-            <form action="{{ url('/search/posts') }}" method="POST">
-                @csrf
-                <input type="hidden" value="{{ $search_text }}" name="search"/>
+            <form action="{{ url('/search/posts') }}" method="GET">
+                <input type="hidden" value="{{ $search_text }}" name="search_post"/>
                 <button type="submit" class="ms-3 btn btn-outline-secondary">
                     Posts ({{ $posts_count }})
                 </button>
             </form>
-            <form action="{{ url('/search/comments') }}" method="POST">
-                @csrf
-                <input type="hidden" value="{{ $search_text }}" name="search"/>
+            <form action="{{ url('/search/comments') }}" method="GET">
+                <input type="hidden" value="{{ $search_text }}" name="search_comment"/>
                 <button type="submit" class="ms-3 btn btn-outline-secondary">
                     Comments ({{ $comments_count }})
                 </button>
@@ -79,13 +74,9 @@
                                                     Follow Back
                                                 </button>
                                             @elseif(in_array($auth_user->id, $user->following_ids->toArray()))
-                                                <button type="submit" class="btn btn-secondary">
-                                                    Unfollow
-                                                </button>
+                                                <button type="submit" class="btn btn-secondary">Unfollow</button>
                                             @else
-                                                <button type="submit" class="btn btn-primary">
-                                                    Follow
-                                                </button>
+                                                <button type="submit" class="btn btn-primary">Follow</button>
                                             @endif
                                         </form>
                                     </div>

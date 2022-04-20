@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use mysql_xdevapi\Exception;
+use Symfony\Component\Console\Input\Input;
 
 class PostController extends Controller
 {
@@ -115,7 +116,6 @@ class PostController extends Controller
             Log::error($e->getMessage());
             abort(404, $e->getMessage());
         }
-
     }
 
     public function destroy($id)
@@ -128,7 +128,6 @@ class PostController extends Controller
             Log::error($e->getMessage());
             abort(404, $e->getMessage());
         }
-
     }
 
     public function likeOrDislike($id) {
@@ -145,7 +144,6 @@ class PostController extends Controller
             Log::error($e->getMessage());
             abort(404, $e->getMessage());
         }
-
     }
 
     public function likedPosts() {
@@ -161,7 +159,6 @@ class PostController extends Controller
             Log::error($e->getMessage());
             abort(404, $e->getMessage());
         }
-
     }
 
     public function countryPosts($id) {
@@ -183,11 +180,18 @@ class PostController extends Controller
 
     public function searchUsers(Request $request) {
         try {
-            $search_text = $request->search;
+            if ($request->search_user !== null) {
+                session(['search_text' => $request->search_user]);
+            }
+            $search_text = session('search_text');
             $pattern = '%' . $search_text . '%';
             $users = User::where('name', 'LIKE', $pattern)
                 ->orWhere('email', 'LIKE', $pattern)
                 ->paginate(3);
+            $users_count = User::where('name', 'LIKE', $pattern)
+                ->orWhere('email', 'LIKE', $pattern)
+                ->count();
+            $users->appends (array('search_text' => $search_text));
             $no_any_user = !$users->isEmpty();
             $posts_count = Post::where('content', 'LIKE', $pattern)
                 ->orWhere('title', 'LIKE', $pattern)
@@ -201,21 +205,25 @@ class PostController extends Controller
                 'no_any_user' => $no_any_user,
                 'posts_count' => $posts_count,
                 'comments_count' => $comments_count,
+                'users_count' => $users_count,
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             abort(404, $e->getMessage());
         }
-
     }
 
     public function searchPosts(Request $request) {
         try {
-            $search_text = $request->search;
+            $search_text = session('search_text');
             $pattern = '%' . $search_text . '%';
             $posts = Post::where('content', 'LIKE', $pattern)
                 ->orWhere('title', 'LIKE', $pattern)
                 ->paginate(3);
+            $posts_count = Post::where('content', 'LIKE', $pattern)
+                ->orWhere('title', 'LIKE', $pattern)
+                ->count();
+            $posts->appends (array('search_text' => $search_text));
             $no_any_post = !$posts->isEmpty();
             $users_count = User::where('name', 'LIKE', $pattern)
                 ->orWhere('email', 'LIKE', $pattern)
@@ -229,19 +237,20 @@ class PostController extends Controller
                 'no_any_post' => $no_any_post,
                 'users_count' => $users_count,
                 'comments_count' => $comments_count,
+                'posts_count' => $posts_count,
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             abort(404, $e->getMessage());
         }
-
     }
 
     public function searchComments(Request $request) {
         try {
-            $search_text = $request->search;
+            $search_text = session('search_text');
             $pattern = '%' . $search_text . '%';
             $comments = Comment::where('comment', 'LIKE', $pattern)->paginate(3);
+            $comments_count = Comment::where('comment', 'LIKE', $pattern)->count();
             $no_any_comment = !$comments->isEmpty();
             $posts_count = Post::where('content', 'LIKE', $pattern)
                 ->orWhere('title', 'LIKE', $pattern)
@@ -256,6 +265,7 @@ class PostController extends Controller
                 'no_any_comment' => $no_any_comment,
                 'users_count' => $users_count,
                 'posts_count' => $posts_count,
+                'comments_count' => $comments_count,
             ]);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

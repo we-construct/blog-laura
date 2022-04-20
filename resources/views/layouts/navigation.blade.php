@@ -28,10 +28,9 @@
                         </x-nav-link>
                     </div>
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex flex items-center">
-                        <form action="{{ url('/search/users') }}" method="POST">
-                            @csrf
+                        <form action="{{ url('/search/users') }}" method="GET">
                             <div class="input-group" style="height: 50%">
-                                <input type="text" class="form-control" placeholder="Search" name="search" />
+                                <input type="text" class="form-control" placeholder="Search" name="search_user" role="search" value="{{request()->get('search','')}}" />
                                 <button class="btn btn-outline-secondary" type="submit">
                                     <img src="{{ asset('images/icons/search.svg') }}" alt=""/>
                                 </button>
